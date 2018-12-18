@@ -10,25 +10,26 @@ public class ServerThread extends Thread {
     private FileInputStream fis;
     private DataOutputStream dos;
     private ObjectInputStream objin;
+    private ObjectOutputStream objout;
     private DataInputStream	 in ;
     private NetTransferworm netTransferin;
     
 	public ServerThread(Socket s) {
 		this.s = s;
-		try {
-			dos =new DataOutputStream(s.getOutputStream());
-			in =new DataInputStream(s.getInputStream());
-			objin=new ObjectInputStream(s.getInputStream());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+//		try {
+//			objin=new ObjectInputStream(s.getInputStream());
+//			in =new DataInputStream(s.getInputStream());
+//			dos =new DataOutputStream(s.getOutputStream());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	public void downloadfile(int id) throws Exception {	
 	  Doc doc=DataProcessing.searchDoc(id);
       File file =new File(resourcepath+doc.getFilename());
       fis =new FileInputStream(file);
+      dos =new DataOutputStream(s.getOutputStream());
       dos.writeUTF(file.getName());
    
       dos.flush();
@@ -55,7 +56,7 @@ public class ServerThread extends Thread {
 	public void uploadfile(String creator,String fileName,String desciption,Timestamp time, long filelength) throws Exception {
 		
 			String ID=null;
-		
+		   in =new DataInputStream(s.getInputStream());
 		   FileOutputStream   fos =new FileOutputStream(new File(resourcepath +fileName));
 		   byte[] sendb =new byte[1024];
 		   int transLen =0;
@@ -92,7 +93,9 @@ public class ServerThread extends Thread {
 	
 		while(true) {
 			try {
-					netTransferin=(NetTransferworm) objin.readObject();
+				    objin=new ObjectInputStream(s.getInputStream());
+					
+				    netTransferin=(NetTransferworm) objin.readObject();
 					System.out.println(netTransferin.action+"  "+netTransferin.creator);
 //					//监听获取worm连接的行为
 					if(netTransferin.action.equals("download"))
@@ -116,15 +119,15 @@ public class ServerThread extends Thread {
 				}
 				
 				}
-		try {
-			s.close();
-			objin.close();
-			in.close();
-			dos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			s.close();
+//			objin.close();
+//			in.close();
+//			dos.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		}
 	

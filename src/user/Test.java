@@ -1,3 +1,4 @@
+package user;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.*;
@@ -5,21 +6,12 @@ import java.sql.SQLException;
 import java.awt.color.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 
-public class Main {
+public class Test{
 	public static void main(String[] args) throws Exception {
 		
 
-		String driverName = "com.mysql.jdbc.Driver"; // 加载数据库驱动类
-		String url = "jdbc:mysql://localhost:3306/document?useSSL=false"; // 声明数据库的URL
-		String user = "root"; // 数据库用户
-		String password = "2073710110mm";// 数据库密码
-		DataProcessing.connectToDatabase(driverName, url, user, password);
-		DataProcessing.Init();
-	 
-		JFrame f1 = new JFrame("登录");
+		JFrame f1 = new JFrame("系统登录界面");
 		BJPanel p = new BJPanel();
 		p.setSize(new Dimension(719, 450));
 		f1.setLocation(350,200);
@@ -78,50 +70,6 @@ public class Main {
 		passwordField.setBounds(200, 213, 135, 25);
 		p.add(passwordField);
 		f1.setVisible(true);
-		
-		
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String name = textField.getText();
-				char[] c1 = passwordField.getPassword();
-				String password = new String(c1);
-				User use;
-				try {
-					use = DataProcessing.searchUser(name, password);
-					if (use != null)
-
-					{
-						use.showMenu();
-						f1.setVisible(false);
-						
-//						if(use.showMenu()==1)
-//						{
-//					    DataProcessing.disconnectFromDatabase();
-//						Main aMain=new Main();
-//						String[] a=new String[0];
-//						main(a);
-//						}
-					} else
-						new DealMessage("您的密码或用户名输入错误");
-				} catch (SQLException e1) {
-					System.out.println(e1.getMessage());
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});		
-		f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 	}
-	protected void finalize()
-	{
-		DataProcessing.disconnectFromDatabase();
-		try {
-			DataProcessing.shutdown();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
 }

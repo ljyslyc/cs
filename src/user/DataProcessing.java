@@ -1,3 +1,4 @@
+package user;
 import java.util.Enumeration;
 
 import java.util.Vector;
@@ -14,7 +15,7 @@ public  class DataProcessing {
 	 
 	private static Socket socket;
 	private static DataInputStream in;
-	private static ObjectOutputStream out;
+	private static ObjectOutputStream objout;
     private static FileOutputStream fos;
     private static String downpath = "E:\\downloadpath\\";
     private static DataOutputStream dos;
@@ -62,10 +63,9 @@ public  class DataProcessing {
 	public static  void Init() throws IOException{
 		
 		socket =new Socket("localhost",12345);
-		out =new ObjectOutputStream (socket.getOutputStream());	
-		in =new DataInputStream(socket.getInputStream());
-		dos =new DataOutputStream(socket.getOutputStream());
-
+//		objout =new ObjectOutputStream (socket.getOutputStream());
+//		dos =new DataOutputStream(socket.getOutputStream());
+//		in =new DataInputStream(socket.getInputStream());
 	}
 	public static Enumeration<Doc> getAllDocs() throws SQLException,IllegalStateException{		
 		Vector <Doc> docs = new Vector<Doc>();
@@ -224,7 +224,10 @@ public  class DataProcessing {
 	ntOut.action="download";
 	 int a = Integer.parseInt(id);
 	ntOut.id=a;
-    out.writeObject(ntOut);
+	objout =new ObjectOutputStream (socket.getOutputStream());
+	objout =new ObjectOutputStream (socket.getOutputStream());
+    in =new DataInputStream(socket.getInputStream());
+    objout.writeObject(ntOut);
   
    String fileName = in.readUTF();
    long fileLength = in.readLong();
@@ -258,8 +261,10 @@ public  class DataProcessing {
 		netTransferout.fileName=filename;
 		netTransferout.time=timestamp;
 		netTransferout.filelength=filelength;
-		out.writeObject(netTransferout);
-		
+		objout =new ObjectOutputStream (socket.getOutputStream());
+		objout.writeObject(netTransferout);
+    	dos =new DataOutputStream(socket.getOutputStream());
+	
 		
 	      File file =new File(path);
 	      FileInputStream   fis =new FileInputStream(file);
@@ -285,10 +290,10 @@ public  class DataProcessing {
 	} 
 	
    public static int shutdown() throws Exception {
-	   // ObjectOutputStream out =new ObjectOutputStream (socket.getOutputStream());
+	   // ObjectOutputStream objout =new ObjectOutputStream (socket.getOutputStream());
 		NetTransferworm netTransferout=new NetTransferworm();
 		netTransferout.action="shutdown";
-		out.writeObject(netTransferout);
+		objout.writeObject(netTransferout);
 	   
 	   return JFrame.EXIT_ON_CLOSE;
    }
@@ -296,7 +301,7 @@ public  class DataProcessing {
 	{
 		try {
 			socket.close();
-			out.close();	
+			objout.close();	
 			in.close();
 			dos.close();
 		} catch (IOException e) {
