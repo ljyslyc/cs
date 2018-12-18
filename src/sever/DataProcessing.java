@@ -6,11 +6,7 @@ import java.util.Vector;
 
 
 import java.sql.*;
-
-
-
 public  class DataProcessing {
-	
 	private static Connection connection;
 	private static Statement statement;
 	private static PreparedStatement preparedStatement;
@@ -19,20 +15,16 @@ public  class DataProcessing {
 	private static ResultSetMetaData metaData;
 	@SuppressWarnings("unused")
 	private static int numberOfRows;
-	
 	private static boolean connectedToDatabase = false;
 	
 	
 	public static void connectToDatabase(String driverName, String url, String user, String password) throws Exception
 	  {
 			Class.forName(driverName);		// 加载数据库驱动类
-			
+
 	      connection=DriverManager.getConnection(url, user, password);   // 建立数据库连接
 	      connectedToDatabase = true;
 	  }
-	
-	
-	
 	public static void disconnectFromDatabase(){
 		if ( connectedToDatabase ){
 			// close Statement and Connection
@@ -112,14 +104,6 @@ public  class DataProcessing {
 		
 		return temp;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	public static Enumeration<Doc> getAllDocs() throws SQLException,IllegalStateException{		
 		Vector <Doc> docs = new Vector<Doc>();
 		Doc temp=null; 
@@ -131,7 +115,6 @@ public  class DataProcessing {
 		         ResultSet.CONCUR_READ_ONLY );
 		String sql="select * from doc_info";
 		resultSet = statement.executeQuery(sql);
-		
 		while (resultSet.next()){
 			String ID=resultSet.getString("id");
 			String creator=resultSet.getString("creator");
@@ -141,8 +124,7 @@ public  class DataProcessing {
 			temp =new Doc(ID,creator, timestamp, description, filename);
 			docs.addElement(temp);
 			
-		}
-		
+			}
 		return docs.elements();	
 
 	} 

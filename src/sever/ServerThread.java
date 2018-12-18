@@ -10,14 +10,10 @@ public class ServerThread extends Thread {
     private FileInputStream fis;
     private DataOutputStream dos;
     private ObjectInputStream objin;
-
 	public ServerThread(Socket s) {
 		this.s = s;
-		
-		
 	}
-	public void downloadfile(int id) throws Exception {
-		
+	public void downloadfile(int id) throws Exception {	
 	  Doc doc=DataProcessing.searchDoc(id);
       File file =new File(resourcepath+doc.getFilename());
       fis =new FileInputStream(file);
@@ -90,16 +86,7 @@ public class ServerThread extends Thread {
 				
 					objin=new ObjectInputStream(s.getInputStream());
 					NetTransfer netTransferin=(NetTransfer) objin.readObject();
-//					switch(netTransferin.action) {
-//					case "download":
-//					downloadfile(netTransferin.id); 
-//					break;	
-//					
-//					case "upload":
-//					 uploadfile(netTransferin.creator,netTransferin.fileName,netTransferin.description,netTransferin.time,netTransferin.filelength);
-//						break;
-//					
-//					}	
+//					//获取连接的行为
 					if(netTransferin.action.equals("download"))
 					{  
 						downloadfile(netTransferin.id); 

@@ -5,6 +5,10 @@ import java.sql.*;
 
 public class NetTransfer implements Serializable {
 
+	public static final long serialVersionUID=1L;
+	/**
+	 * 信息处理
+	 */
 	public String action;
 	public String creator="jack";
 	public int id;
