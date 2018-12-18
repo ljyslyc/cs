@@ -70,6 +70,7 @@ public class Main {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
+			
 		});
 		button_1.setBounds(250, 280, 90, 25);
 		button_1.setFont(new Font("Ώ¬Με", Font.BOLD, 20));
