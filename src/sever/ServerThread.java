@@ -85,7 +85,7 @@ public class ServerThread extends Thread {
 				try {
 				
 					objin=new ObjectInputStream(s.getInputStream());
-					NetTransfer netTransferin=(NetTransfer) objin.readObject();
+					NetTransferworm netTransferin=(NetTransferworm) objin.readObject();
 //					//获取连接的行为
 					if(netTransferin.action.equals("download"))
 					{  
@@ -95,6 +95,7 @@ public class ServerThread extends Thread {
 					{  
 						uploadfile(netTransferin.creator,netTransferin.fileName,netTransferin.description,netTransferin.time,netTransferin.filelength);
 					}
+					
 					if(netTransferin.action.equals("shutdown"))
 					{  
 						break;

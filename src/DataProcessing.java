@@ -218,7 +218,7 @@ public  class DataProcessing {
    public static void searchDoc(String id) throws Exception {
 	   
 	ObjectOutputStream out =new ObjectOutputStream (socket.getOutputStream());	 
-	NetTransfer ntOut=new NetTransfer();
+	NetTransferworm ntOut=new NetTransferworm();
 	ntOut.action="download";
 	 int a = Integer.parseInt(id);
 	ntOut.id=a;
@@ -254,7 +254,7 @@ public  class DataProcessing {
 
 	public static void insertDoc(String path, String creator,  Timestamp timestamp, String description, String filename, long filelength) throws  IOException{
 		ObjectOutputStream out =new ObjectOutputStream (socket.getOutputStream());
-		NetTransfer netTransferout=new NetTransfer();
+		NetTransferworm netTransferout=new NetTransferworm();
 		netTransferout.creator=creator;
 		netTransferout.action="upload";
 		netTransferout.description=description;
@@ -262,6 +262,8 @@ public  class DataProcessing {
 		netTransferout.time=timestamp;
 		netTransferout.filelength=filelength;
 		out.writeObject(netTransferout);
+		out.close();
+		
 	      File file =new File(path);
 	      FileInputStream   fis =new FileInputStream(file);
 	      DataOutputStream dos =new DataOutputStream(socket.getOutputStream());
@@ -289,7 +291,7 @@ public  class DataProcessing {
    public static int shutdown() throws Exception {
 	   
 	   ObjectOutputStream out =new ObjectOutputStream (socket.getOutputStream());
-		NetTransfer netTransferout=new NetTransfer();
+		NetTransferworm netTransferout=new NetTransferworm();
 		netTransferout.action="shutdown";
 		out.writeObject(netTransferout);
 	   

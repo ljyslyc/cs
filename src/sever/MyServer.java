@@ -8,6 +8,7 @@ import java.net.*;
 public class MyServer {
 	
 	public static void main(String[] args) throws Exception {
+	
 		ServerSocket ss=new ServerSocket(12345);
 		System.out.println("Waiting connection");
 		String driverName = "com.mysql.jdbc.Driver"; // 加载数据库驱动类
