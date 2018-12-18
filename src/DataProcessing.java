@@ -17,7 +17,7 @@ public  class DataProcessing {
 	private static ObjectOutputStream out;
     private static FileOutputStream fos;
     private static String downpath = "E:\\downloadpath\\";
-	
+    private static DataOutputStream dos;
 	
 	
     
@@ -62,6 +62,9 @@ public  class DataProcessing {
 	public static  void Init() throws IOException{
 		
 		socket =new Socket("localhost",12345);
+		out =new ObjectOutputStream (socket.getOutputStream());	
+		in =new DataInputStream(socket.getInputStream());
+		dos =new DataOutputStream(socket.getOutputStream());
 
 	}
 	public static Enumeration<Doc> getAllDocs() throws SQLException,IllegalStateException{		
@@ -216,17 +219,13 @@ public  class DataProcessing {
 	}	
             
    public static void searchDoc(String id) throws Exception {
-	   
-	ObjectOutputStream out =new ObjectOutputStream (socket.getOutputStream());	 
+	    
 	NetTransferworm ntOut=new NetTransferworm();
 	ntOut.action="download";
 	 int a = Integer.parseInt(id);
 	ntOut.id=a;
     out.writeObject(ntOut);
   
-    
-   in =new DataInputStream(socket.getInputStream());
-	
    String fileName = in.readUTF();
    long fileLength = in.readLong();
    fos =new FileOutputStream(new File(downpath + fileName));
@@ -244,8 +243,6 @@ public  class DataProcessing {
        fos.flush();
    }
    System.out.println("----接收文件<" + fileName +">成功-------");
-   if(in !=null)
-      in.close();
    if(fos !=null)
        fos.close();
 
@@ -253,7 +250,7 @@ public  class DataProcessing {
    }
 
 	public static void insertDoc(String path, String creator,  Timestamp timestamp, String description, String filename, long filelength) throws  IOException{
-		ObjectOutputStream out =new ObjectOutputStream (socket.getOutputStream());
+		
 		NetTransferworm netTransferout=new NetTransferworm();
 		netTransferout.creator=creator;
 		netTransferout.action="upload";
@@ -262,11 +259,11 @@ public  class DataProcessing {
 		netTransferout.time=timestamp;
 		netTransferout.filelength=filelength;
 		out.writeObject(netTransferout);
-		out.close();
+		
 		
 	      File file =new File(path);
 	      FileInputStream   fis =new FileInputStream(file);
-	      DataOutputStream dos =new DataOutputStream(socket.getOutputStream());
+	      
 	      byte[] sendb =new byte[1024];
 	      int len =0;
 	      try {
@@ -281,21 +278,31 @@ public  class DataProcessing {
 	      finally{
 	          if(fis !=null)
 	              fis.close();
-	          if(dos !=null)
-	              dos.close();
+//	          if(dos !=null)
+//	              dos.close();
 	          
 	      }
-	      out.close();
 	} 
 	
    public static int shutdown() throws Exception {
-	   
-	   ObjectOutputStream out =new ObjectOutputStream (socket.getOutputStream());
+	   // ObjectOutputStream out =new ObjectOutputStream (socket.getOutputStream());
 		NetTransferworm netTransferout=new NetTransferworm();
 		netTransferout.action="shutdown";
 		out.writeObject(netTransferout);
 	   
-	   
 	   return JFrame.EXIT_ON_CLOSE;
    }
+   protected void finalize()
+	{
+		try {
+			socket.close();
+			out.close();	
+			in.close();
+			dos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	} 
+
 	}

@@ -55,7 +55,7 @@ public class Operator extends User{
 
 	
 	public int showMenu(){
-		OpeFrame adFrame=new OpeFrame(this.getName());
+		OpeFrame opFrame=new OpeFrame(this.getName());
 //		while(adFrame.returnfeg()==false)
 //		{
 //			System.out.println(" ");

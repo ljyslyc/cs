@@ -17,12 +17,19 @@ public class MyServer {
 		String password = "2073710110mm";// 数据库密码
 		DataProcessing.connectToDatabase(driverName, url, user, password);
 		int i=0;
-		while(true) {	
+		//while(true) {	
 			Socket socket=ss.accept();
 	        i++;
 			System.out.println("Accepting user"+i+" "+ "Connection....");
 			ServerThread uServerThread=new ServerThread(socket);
 			uServerThread.start();
-			}
+//			try {
+//				System.out.println("本次连接已关闭");
+//				socket.close();
+//			} catch (IOException e1) {
+//			
+//				e1.printStackTrace();
+//			}
+		//	}
      }
 }

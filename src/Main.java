@@ -117,5 +117,11 @@ public class Main {
 	protected void finalize()
 	{
 		DataProcessing.disconnectFromDatabase();
+		try {
+			DataProcessing.shutdown();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

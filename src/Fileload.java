@@ -189,6 +189,7 @@ public class Fileload {
 					DataProcessing.insertDoc(path, keyusername, timestamp, desc, f.getName(),f.length());
 				
 				} catch (Exception e1) {
+					e1.printStackTrace();
 					new DealMessage("ÎÄ¼þ²Ù×÷Ê§°Ü");
 					f1.setVisible(false);
 				}
