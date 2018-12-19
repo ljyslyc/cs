@@ -23,12 +23,6 @@ public class MyServer {
 			System.out.println("Accepting user"+i+" "+ "Connection....");
 			ServerThread uServerThread=new ServerThread(socket);
 			uServerThread.start();
-			try {
-				System.out.println("本次连接已关闭");
-				socket.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
 	}
 }
 

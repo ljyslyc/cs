@@ -62,7 +62,7 @@ public class ServerThread extends Thread {
 		   int transLen =0;
 		   System.out.println("----开始接收文件<" + fileName +">,文件大小为<" + filelength +">----");
 		   int length=0;
-		   while((length = fis.read(sendb)) != -1){
+		   while((length = in.read(sendb)) != -1){
 //		       int read =0;
 //		       read = in.read(sendBytes);
 //		       if(read <=0)
@@ -90,35 +90,45 @@ public class ServerThread extends Thread {
 	
 	
 	public void run() {
-	
+		 try {
+			objin=new ObjectInputStream(s.getInputStream());
+		
 		while(true) {
-			try {
-				    objin=new ObjectInputStream(s.getInputStream());
-					
+
+				  
 				    netTransferin=(NetTransferworm) objin.readObject();
-					System.out.println(netTransferin.action+"  "+netTransferin.creator);
-//					//监听获取worm连接的行为
-					if(netTransferin.action.equals("download"))
-					{  
-						downloadfile(netTransferin.id); 
+					if(netTransferin!=null)
+					{
+						System.out.println(netTransferin.action+"  "+netTransferin.creator);
+//						//监听获取worm连接的行为
+						if(netTransferin.action.equals("download"))
+						{  
+							downloadfile(netTransferin.id); 
+						}
+						if(netTransferin.action.equals("upload"))
+						{  
+							uploadfile(netTransferin.creator,netTransferin.fileName,netTransferin.description,netTransferin.time,netTransferin.filelength);
+						}
+						
+						if(netTransferin.action.equals("shutdown"))
+						{  
+							break;
+						}		
 					}
-					if(netTransferin.action.equals("upload"))
-					{  
-						uploadfile(netTransferin.creator,netTransferin.fileName,netTransferin.description,netTransferin.time,netTransferin.filelength);
-					}
-					
-					if(netTransferin.action.equals("shutdown"))
-					{  
-						break;
-					}		
 					
 					//objin.close();///....................
-				
+		}
+		
+			System.out.println("本次连接已关闭");
+			s.close();
+			objin.close();
+			in.close();
+			dos.close();
+
 				} catch (Exception  e) {
 					e.printStackTrace();
 				}
 				
-				}
 //		try {
 //			s.close();
 //			objin.close();

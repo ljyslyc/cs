@@ -15,6 +15,7 @@ public  class DataProcessing {
 	 
 	private static Socket socket;
 	private static DataInputStream in;
+	private static ObjectInputStream objin;
 	private static ObjectOutputStream objout;
     private static FileOutputStream fos;
     private static String downpath = "E:\\downloadpath\\";
@@ -214,8 +215,7 @@ public  class DataProcessing {
 	if (temp!=0)
 		return true;
 	else
-		return false;
-		
+		return false;	
 	}	
             
    public static void searchDoc(String id) throws Exception {
@@ -225,10 +225,9 @@ public  class DataProcessing {
 	 int a = Integer.parseInt(id);
 	ntOut.id=a;
 	objout =new ObjectOutputStream (socket.getOutputStream());
-	objout =new ObjectOutputStream (socket.getOutputStream());
     in =new DataInputStream(socket.getInputStream());
     objout.writeObject(ntOut);
-  
+    Thread.sleep(100);
    String fileName = in.readUTF();
    long fileLength = in.readLong();
    fos =new FileOutputStream(new File(downpath + fileName));
@@ -252,7 +251,7 @@ public  class DataProcessing {
 	   
    }
 
-	public static void insertDoc(String path, String creator,  Timestamp timestamp, String description, String filename, long filelength) throws  IOException{
+	public static void insertDoc(String path, String creator,  Timestamp timestamp, String description, String filename, long filelength) throws  Exception{
 		
 		NetTransferworm netTransferout=new NetTransferworm();
 		netTransferout.creator=creator;
@@ -262,9 +261,10 @@ public  class DataProcessing {
 		netTransferout.time=timestamp;
 		netTransferout.filelength=filelength;
 		objout =new ObjectOutputStream (socket.getOutputStream());
+		//objout.flush(); // flush objout buffer to send header information
 		objout.writeObject(netTransferout);
     	dos =new DataOutputStream(socket.getOutputStream());
-	
+	   
 		
 	      File file =new File(path);
 	      FileInputStream   fis =new FileInputStream(file);
@@ -300,11 +300,12 @@ public  class DataProcessing {
    protected void finalize()
 	{
 		try {
+			DataProcessing.shutdown();
 			socket.close();
 			objout.close();	
 			in.close();
 			dos.close();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
