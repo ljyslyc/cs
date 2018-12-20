@@ -222,7 +222,7 @@ public  class DataProcessing {
 	    
 	NetTransferworm ntOut=new NetTransferworm();
 	ntOut.action="download";
-	 int a = Integer.parseInt(id);
+	int a = Integer.parseInt(id);
 	ntOut.id=a;
 	objout =new ObjectOutputStream (socket.getOutputStream());
     in =new DataInputStream(socket.getInputStream());
