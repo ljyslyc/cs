@@ -21,11 +21,12 @@ public class NetTransferworm implements Serializable {
 	public Timestamp time;
     public Long filelength;
 	public String paras;
-
+	public byte[] sendb ;
 	public Boolean ifRun;
 
 	public NetTransferworm() {
 		// TODO Auto-generated constructor stub
+		this.sendb =new byte[1024];
 	}
 	public NetTransferworm(String action, String creator, int id, String description, String fileName, Timestamp time,
 			long filelength, String paras, boolean ifRun) {
@@ -38,6 +39,7 @@ public class NetTransferworm implements Serializable {
 		this.filelength = filelength;
 		this.paras = paras;
 		this.ifRun = ifRun;
+		this.sendb =new byte[1024];
 	}
 	public String getAction() {
 		return action;
