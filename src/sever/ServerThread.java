@@ -11,15 +11,14 @@ public class ServerThread extends Thread {
     private DataOutputStream dos;
     private ObjectInputStream objin;
     private ObjectOutputStream objout;
-    private DataInputStream	 in ;
+    private DataInputStream	 in;
     private NetTransferworm netTransferin;
-    
 	public ServerThread(Socket s) {
 		this.s = s;
 //		try {
-//			objin=new ObjectInputStream(s.getInputStream());
-//			in =new DataInputStream(s.getInputStream());
-//			dos =new DataOutputStream(s.getOutputStream());
+//			
+////			in =new DataInputStream(s.getInputStream());
+////			dos =new DataOutputStream(s.getOutputStream());
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
@@ -35,6 +34,7 @@ public class ServerThread extends Thread {
       dos.flush();
       dos.writeLong(file.length());
       dos.flush();
+      
       byte[] sendBytes =new byte[1024];
       int length =0;
       try {
@@ -55,21 +55,24 @@ public class ServerThread extends Thread {
 	}
 	public void uploadfile(String creator,String fileName,String desciption,Timestamp time, long filelength) throws Exception {
 		
-			String ID=null;
+		   String ID=null;
 		   in =new DataInputStream(s.getInputStream());
 		   FileOutputStream   fos =new FileOutputStream(new File(resourcepath +fileName));
-		   byte[] sendb =new byte[1024];
+		   NetTransferworm netTransferwormin;
+		   
 		   int transLen =0;
 		   System.out.println("----开始接收文件<" + fileName +">,文件大小为<" + filelength +">----");
 		   int length=0;
-		   while((length = in.read(sendb)) != -1){
-//		       int read =0;
-//		       read = in.read(sendBytes);
-//		       if(read <=0)
-//		           break;
-		       transLen += length;
+		   byte[] sendbyte=new byte[1024];
+		   while(true){
+		       int read =0;
+		       netTransferwormin=(NetTransferworm) objin.readObject();
+		       sendbyte=netTransferwormin.sendb.getBytes();
+		       read=sendbyte.length;
+		       if(read <=0)
+		           break;
 		       System.out.println("正在上传，请稍候....");
-		       fos.write(sendb,0, length);
+		       fos.write(sendbyte,0,read);
 		       fos.flush();
 		   }
 		   System.out.println("----接收文件<" +fileName +">成功-------");
@@ -81,30 +84,30 @@ public class ServerThread extends Thread {
 		   DataProcessing.insertDoc("0003",creator, time,  desciption,fileName);
 
 	}
-   public void  userlogin() throws IOException {
+   public void  userlogin() throws IOException 
+   {
 	 //  DataInputStream	 in =new DataInputStream(s.getInputStream());
 	
 	//=============用户登录连接模块
 			
    }
-	
-	
+   
 	public void run() {
 		 try {
-			objin=new ObjectInputStream(s.getInputStream());
-		
+			 objin=new ObjectInputStream(s.getInputStream());
+			 objout =new ObjectOutputStream (s.getOutputStream());
 		while(true) {
-
-				  
 				    netTransferin=(NetTransferworm) objin.readObject();
+				    
 					if(netTransferin!=null)
 					{
 						System.out.println(netTransferin.action+"  "+netTransferin.creator);
-//						//监听获取worm连接的行为
+						//监听获取worm连接的行为
 						if(netTransferin.action.equals("download"))
 						{  
 							downloadfile(netTransferin.id); 
 						}
+						
 						if(netTransferin.action.equals("upload"))
 						{  
 							uploadfile(netTransferin.creator,netTransferin.fileName,netTransferin.description,netTransferin.time,netTransferin.filelength);
@@ -115,7 +118,6 @@ public class ServerThread extends Thread {
 							break;
 						}		
 					}
-					
 					//objin.close();///....................
 		}
 		
@@ -124,7 +126,6 @@ public class ServerThread extends Thread {
 			objin.close();
 			in.close();
 			dos.close();
-
 				} catch (Exception  e) {
 					e.printStackTrace();
 				}

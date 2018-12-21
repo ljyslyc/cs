@@ -14,21 +14,32 @@ public class NetTransferworm implements Serializable {
 	 * 信息处理
 	 */
 	public String action;
-	public String creator="jack";
+	public String creator;
 	public Integer id;
 	public String description;
 	public String fileName;
 	public Timestamp time;
     public Long filelength;
 	public String paras;
-	public byte[] sendb ;
+	public String sendb ;
 	public Boolean ifRun;
 	public NetTransferworm() {
 		// TODO Auto-generated constructor stub
-		this.sendb =new byte[1024];
 	}
+	public static String ConvertToString(byte[] data)
+    {
+		if(data==null)
+			return null;
+        return data.toString();
+    }
+	public static byte[] ConvertToByte(String str)
+    {
+		if(str==null)
+			return null;
+        return str.getBytes();
+    }
 	public NetTransferworm(String action, String creator, int id, String description, String fileName, Timestamp time,
-			long filelength, String paras, boolean ifRun) {
+	    long filelength, String paras, boolean ifRun) {
 		this.action = action;
 		this.creator = creator;
 		this.id = id;
@@ -38,7 +49,7 @@ public class NetTransferworm implements Serializable {
 		this.filelength = filelength;
 		this.paras = paras;
 		this.ifRun = ifRun;
-		this.sendb =new byte[1024];
+		this.sendb =null;
 	}
 	public String getAction() {
 		return action;
@@ -88,6 +99,12 @@ public class NetTransferworm implements Serializable {
 	public void setParas(String paras) {
 		this.paras = paras;
 	}
+	public String getSendb() {
+		return sendb;
+	}
+	public void setSendb(String sendb) {
+		this.sendb = sendb;
+	}
 	public Boolean getIfRun() {
 		return ifRun;
 	}
@@ -97,6 +114,5 @@ public class NetTransferworm implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 	
 }

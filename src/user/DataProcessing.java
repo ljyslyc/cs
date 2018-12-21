@@ -64,7 +64,9 @@ public  class DataProcessing {
 	public static  void Init() throws IOException{
 		
 		socket =new Socket("localhost",12345);
-//		objout =new ObjectOutputStream (socket.getOutputStream());
+		objout =new ObjectOutputStream (socket.getOutputStream());
+		objout.flush();
+		objin=new ObjectInputStream(socket.getInputStream());
 //		dos =new DataOutputStream(socket.getOutputStream());
 //		in =new DataInputStream(socket.getInputStream());
 	}
@@ -219,7 +221,6 @@ public  class DataProcessing {
 	}	
             
    public static void searchDoc(String id) throws Exception {
-	    
 	NetTransferworm ntOut=new NetTransferworm();
 	ntOut.action="download";
 	int a = Integer.parseInt(id);
@@ -260,21 +261,24 @@ public  class DataProcessing {
 		netTransferout.fileName=filename;
 		netTransferout.time=timestamp;
 		netTransferout.filelength=filelength;
-		objout =new ObjectOutputStream (socket.getOutputStream());
+		//objout =new ObjectOutputStream (socket.getOutputStream());
 		//objout.flush(); // flush objout buffer to send header information
 		objout.writeObject(netTransferout);
-    	dos =new DataOutputStream(socket.getOutputStream());
+		objout.flush();
+    	//dos =new DataOutputStream(socket.getOutputStream());
 	   
 		
 	      File file =new File(path);
 	      FileInputStream   fis =new FileInputStream(file);
-	      
-	      byte[] sendb =new byte[1024];
 	      int len =0;
+	      byte[] sendbyte=new byte[1024];
 	      try {
-				while((len = fis.read(sendb)) != -1){
-				dos.write(sendb,0,len);
-				dos.flush();
+				while((len = fis.read(sendbyte)) != -1){
+					netTransferout.sendb=sendbyte.toString();
+//				dos.write(sendb,0,len);
+//				dos.flush();
+					objout.writeObject(netTransferout);
+					objout.flush();
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
