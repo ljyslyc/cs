@@ -22,7 +22,7 @@ public abstract class User {
 		this.role=role;				
 	}
 	
-	public boolean changeUserInfo(String password) throws SQLException,IllegalStateException{
+	public boolean changeUserInfo(String password) throws Exception{
 		//写用户信息到存储
 		if (DataProcessing.updateUser(name, password, role)){
 			this.password=password;

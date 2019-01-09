@@ -1,0 +1,41 @@
+1.添加背景框
+2.基于c/s文件操作
+3.注销用户，退出系统
+4.消息框展示
+5.关闭传输按钮是中断服务器连接
+6.背景类继承，构造函数适配图片比例
+7.（异步操作）定义一个ServerSocket监听在端口12345上 ， server尝试接收其他Socket的连接请求，server的accept方法是阻塞式的 ，每接收到一个Socket就建立一个新的线程来处理它
+https://blog.csdn.net/hlhakey/article/details/47030295 
+如果输出流不是马上关闭的情况下记得flush一下，这样数据才会真正的从缓冲区里面写入
+线程都是独立的，而且异步执行，也就是说每个线程都包含了运行时所需要的数据或方法，而不需要外部的资源或方法，也不必关心其它线程的状态或行为。但是经常有一些同时运行的线程需要共享数据，此时就需考虑其他线程的状态和行为，否则就不能保证程序的运行结果的正确性。
+
+8.然后给用户展示在页面上。我们知道Socket在读数据的时候是阻塞式的，如果没有读到数据程序会一直阻塞在那里。在同步请求的时候我们肯定是不能允许这样的情况发生的，这就需要我们在请求达到一定的时间后控制阻塞的中断，让程序得以继续运行。Socket为我们提供了一个setSoTimeout()方法来设置接收数据的超时时间，单位是毫秒。当设置的超时时间大于0，并且超过了这一时间Socket还没有接收到返回的数据的话，Socket就会抛出一个SocketTimeoutException。 
+假设我们需要控制我们的客户端在开始读取数据10秒后还没有读到数据就中断阻塞的话我们可以这样做：
+未实现
+9.对象序列化
+10.流关闭，socket也关闭了
+Java的socket是一个全双工套接字，任何的输入流或输出流的close()都会造成Socket关闭。
+
+解决办法：使用socket.shutdownOutput()方法关闭套接字的输出流，使服务器知道输出流关闭，可以得到流末尾标志（-1）。
+
+同样，可以使用socket.shutdownInput()方法单独关闭套接字的输入流。
+11. https://blog.csdn.net/alrdy/article/details/7718174  
+  1.背景：
+   在Socket通信中，当我们希望传输对象时，往往会用到输入/输出对象流。
+   ObjectInputStream in=new ObjectInputStream(socket.getInputStream());
+   ObjectOutputStream out=new ObjectOutputStream(socket.getOutputStream());
+   需要传递对象的类必须implements Serializable，否则会抛出java.io.NotSerializableException的异常。
+
+2、client端与server端的ObjectInputStream与ObjectOutputStream它们有一定的顺序，否则会造成两方互相等待数据而导致死锁。
+
+如果client端的顺序是先ObjectInputStream ,再ObjectOutputStream，那么server端就必须是ObjectOutputStream，然后再ObjectInputStream。
+
+如果clien端的顺序是先ObjectOutputStream ，再ObjectInputStream,那么server端就必须是ObjectInputStream ，然后再ObjectOutputStream。
+
+   2 .问题：
+   当程序调用socket.getInputStream()程序被被卡住。
+   3.原因：
+   socket.getInputStream()方法会导致程序阻塞，直到inputStream收到对方发过来的报文消息，程序才会继续往下执行。
+   public ObjectInputStream(InputStream in) throws IOException的官方API显示：Creates an ObjectInputStream that reads from the specified InputStream. A serialization stream header is read from the stream and verified. This constructor will block until the corresponding ObjectOutputStream has written and flushed the header. [1]
+12.
+socket和server这套api，在多客户端的时候，是基于一个线程一个socket的模式运行，也叫bio。你也可以去了解一下nio，换一套api，用socketchannel，bytebuffer，selector。这一套可以不用一个线程一个socket

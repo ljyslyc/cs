@@ -36,6 +36,12 @@ public class BrFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					System.out.println("ÍË³ö...");
+					try {
+						DataProcessing.shutdown();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					System.exit(0);
 				}
 			});

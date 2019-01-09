@@ -63,10 +63,7 @@ public class Operator extends User{
 //		}
 //		return 1;
 		return 0;
-        }	
-	public static void main(String[] args) {
-		new OpeFrame("text");
-	}
+        }
 	
 }
 

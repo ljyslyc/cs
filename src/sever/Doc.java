@@ -2,20 +2,20 @@ package sever;
 
 import java.sql.Timestamp;
 
-class Doc{
+class Doc {
 	private String ID;
 	private String creator;
 	private Timestamp timestamp;
 	private String description;
 	private String filename;
-	
+
 	public Doc(String ID, String creator, Timestamp timestamp, String description, String filename) {
 		super();
 		this.ID = ID;
 		this.creator = creator;
 		this.timestamp = timestamp;
 		this.description = description;
-		this.filename=filename;
+		this.filename = filename;
 	}
 
 	public String getID() {

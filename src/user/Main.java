@@ -8,31 +8,28 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
-
 public class Main {
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception {
-		
 
-		String driverName = "com.mysql.jdbc.Driver"; // 加载数据库驱动类
-		String url = "jdbc:mysql://localhost:3306/document?useSSL=false"; // 声明数据库的URL
-		String user = "root"; // 数据库用户
-		String password = "2073710110mm";// 数据库密码
+		String driverName = "com.mysql.cj.jdbc.Driver"; // 加载数据库驱动类
+		String url = "jdbc:mysql://localhost:3306/document?useSSL=false&serverTimezone=GMT"; // 声明数据库的URL
+		String user = "roots"; // 数据库用户
+		String password = "12345678";// 数据库密码
 		DataProcessing.connectToDatabase(driverName, url, user, password);
 		DataProcessing.Init();
-	 
 		JFrame f1 = new JFrame("登录");
 		BJPanel p = new BJPanel();
 		p.setSize(new Dimension(719, 450));
 		f1.setLocation(350,200);
-		 f1.setSize(p.getWidth(), p.getHeight());
-		 f1.setSize(719,450);
-		 
-		 p.setBorder(new EmptyBorder(5, 5, 5, 5));
+		f1.setSize(p.getWidth(), p.getHeight());
+		f1.setSize(719,450);
+		p.setBorder(new EmptyBorder(5, 5, 5, 5));
 		p.setLayout(new BorderLayout(0, 0));
 		f1.setContentPane(p);
 		p.setLayout(null);
 		p.setBackground(Color.lightGray);
-		
+
 		p.setLocation(350,200);
 		JLabel label_0 = new JLabel("档案管理系统");
 		label_0.setHorizontalAlignment(SwingConstants.CENTER);
@@ -70,7 +67,6 @@ public class Main {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
-			
 		});
 		button_1.setBounds(250, 280, 90, 25);
 		button_1.setFont(new Font("楷体", Font.BOLD, 20));
@@ -116,8 +112,9 @@ public class Main {
 		f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 	}
-	protected void finalize()
+	protected void finalize() throws Exception
 	{
 		DataProcessing.disconnectFromDatabase();
+		
 	}
 }

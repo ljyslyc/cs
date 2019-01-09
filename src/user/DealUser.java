@@ -7,6 +7,7 @@ import java.util.Enumeration;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 
 public class DealUser {
@@ -105,7 +106,7 @@ public class DealUser {
 						else
 							new DealMessage("角色添加失败");
 					}
-					catch(SQLException e1)
+					catch(Exception e1)
 					{
 						new DealMessage("角色添加出现异常");
 					}
@@ -129,67 +130,101 @@ public class DealUser {
 			
 			pane.addTab("删除用户", p1);
 			p1.setLayout(null);
-			String[] str = {"名字","口令","角色"};
-			String[][] s = new String[50][3];
 			
-			try
-			{
-				User use;
-				Enumeration<User> e  = DataProcessing.getAllUser();
-				
-				for(int i=0;e.hasMoreElements();i++)
-				{
-					use = e.nextElement();
-					s[i][0] = use.getName();
-					s[i][1] = use.getPassword();
-					s[i][2] = use.getRole();
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setBounds(50, 60, 500, 240);
+			p1.add(scrollPane);
+			
+			JTable table = new JTable();
+			table.setBounds(50, 60, 500, 240);
+			table.setModel(new DefaultTableModel(
+				new Object[][] {
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+					{null, null, null},
+				},
+				new String[] {
+					"\u7528\u6237\u540D", "\u53E3\u4EE4", "\u89D2\u8272"
 				}
+			));
+			
+			Enumeration<User> e = null;
+			try {
+				e = DataProcessing.getAllUser();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			catch(SQLException e)
-			{
-				new  DealMessage("用户加载失败");
+			int row = 0;
+			while(e.hasMoreElements()) {
+				User user = e.nextElement();
+				table.setValueAt(user.getName(), row, 0);
+				table.setValueAt(user.getPassword(), row, 1);
+				table.setValueAt(user.getRole(), row, 2);
+				row++;
 			}
 			
-			JTable table = new JTable(s,str);
-			table.setForeground(Color.lightGray);
-			table.setBounds(120, 60, 300, 150);
-
-			p1.add(table);
+			scrollPane.setViewportView(table);
 			
-			JButton button_2 = new JButton("删除");
+			JButton button_2 = new JButton("删除");;
 			button_2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					int index = table.getSelectedRow();
-					String name = s[index][0];
-					
+					String name = table.getValueAt(index,0).toString();
 					try
 					{
-						if(true==DataProcessing.deleteUser(name))
-							{
-								new  DealMessage("删除用户成功");
-								f1.setVisible(false);
-							}
-						else
-							new  DealMessage("删除用户失败");		
-						}
-						catch(SQLException e1)
+					if(true==DataProcessing.deleteUser(name))
 						{
-							new  DealMessage("数据库操作出现问题");
+							new  DealMessage("删除用户成功");
+							f1.setVisible(false);
 						}
+					else
+						new  DealMessage("删除用户失败");		
+					}
+					catch(Exception e1)
+					{
+						new  DealMessage("数据库操作出现问题");
+					}
 				}
 			});
-			button_2.setBounds(180, 250, 60, 20);
+			button_2.setBounds(180, 320, 60, 20);
 			p1.add(button_2);
-			
-			 JButton button_3 = new JButton("取消");
+
+			JButton button_3 = new JButton("取消");
 			button_3.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					f1.setVisible(false);
 				}
 			});
-			button_3.setBounds(320, 250, 60, 20);
+			button_3.setBounds(320, 320, 60, 20);
 			p1.add(button_3);
-
 			/*  修改用户信息  */
 			
 			pane.addTab("修改用户信息", p2);
@@ -222,10 +257,12 @@ public class DealUser {
 			label_5.setBounds(175, 132, 54, 15);
 			p2.add(label_5);
 			
-			JTextField textField_5 = new JTextField();
-			textField_5.setBounds(230, 130, 120, 21);
-			p2.add(textField_5);
-			textField_5.setColumns(10);
+			JComboBox comboBox_1 = new JComboBox();
+			comboBox_1.setBounds(230, 130, 120, 21);
+			comboBox_1.addItem("Administrator");
+			comboBox_1.addItem("Operator");
+			comboBox_1.addItem("Browser");
+			p2.add(comboBox_1);
 			
 			JLabel label_6 = new JLabel("新密码");
 			label_6.setForeground(Color.white);
@@ -242,7 +279,7 @@ public class DealUser {
 				public void actionPerformed(ActionEvent e) {
 					String name = textField_3.getText();
 					String password = textField_4.getText();
-					String role = textField_5.getText();
+					String role =comboBox_1.getSelectedItem().toString();
 					String newPass = textField_6.getText();
 					
 					@SuppressWarnings("unused")
@@ -258,7 +295,7 @@ public class DealUser {
 						else
 							new DealMessage("未找到该用户，请您再次输入");
 					}
-					catch(SQLException e1)
+					catch(Exception e1)
 					{
 						new DealMessage("数据库操作出现问题");
 					}

@@ -7,16 +7,16 @@ public class Administrator extends User {
 		super(name,password,role);
 	}
 	
-	public boolean changeUserInfo(String name, String password, String role) throws SQLException{		
+	public boolean changeUserInfo(String name, String password, String role) throws Exception{		
 		return (DataProcessing.updateUser(name, password, role));		
 	}
 	
-	public boolean delUser(String name) throws SQLException{
+	public boolean delUser(String name) throws Exception{
 		return (DataProcessing.deleteUser(name));
 			 
 	}
 	
-	public boolean addUser(String name, String password, String role) throws SQLException{
+	public boolean addUser(String name, String password, String role) throws Exception{
 		return (DataProcessing.insertUser(name, password, role));			
 	}
 	

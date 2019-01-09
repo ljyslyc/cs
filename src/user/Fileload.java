@@ -88,7 +88,6 @@ public class Fileload {
 
 		button.setBounds(180, 320, 60, 20);
 		p1.add(button);
-
 		JButton button_1 = new JButton("È¡Ïû");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
